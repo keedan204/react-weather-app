@@ -1,35 +1,40 @@
 import React from "react";
-import FormattedDate from "./FormattedDate";
-import WeatherIcon from "./WeatherIcon";
-import WeatherTemperature from "./WeatherTemperature";
+import DisplayTemperature from "./DisplayTemperature";
 
 export default function WeatherInfo(props) {
   return (
     <div className="WeatherInfo">
-      <h1>{props.data.city}</h1>
-      <ul>
-        <li>
-          <FormattedDate date={props.data.date} />
-        </li>
-        <li className="text-capitalize">{props.data.description}</li>
-      </ul>
-      <div className="row mt-3">
-        <div className="col-6">
-          <div className="d-flex">
+      <div className="d-flex justify-content-center">
+        <div className="current-weather text-center pt-5">
+          <h2>{props.info.city}</h2>
+          <div className="row">
             <div>
-              <WeatherIcon code={props.data.icon} size={52} />
-            </div>
-
-            <div>
-              <WeatherTemperature celsius={props.data.temperature} />
+              <span>
+                <img
+                  src={props.info.weatherIcon}
+                  alt={props.info.iconDescription}
+                  className="weatherIcon"
+                />
+              </span>
+              <span>
+                <DisplayTemperature celsius={props.info.temperature} />
+              </span>
             </div>
           </div>
-        </div>
-        <div className="col-6">
-          <ul>
-            <li>Humidity: {props.data.humidity}%</li>
-            <li>Wind: {props.data.wind} km/h</li>
-          </ul>
+          <div className="text-capitalize condition">
+            {props.info.conditions}
+          </div>
+          <div className="pb-5">
+            <span>
+              Humidity:{" "}
+              <span className="condition-bold">{props.info.humidity}%</span>
+            </span>
+            ,{" "}
+            <span>
+              Wind:
+              <span className="condition-bold">{props.info.wind}km/h</span>
+            </span>
+          </div>
         </div>
       </div>
     </div>
