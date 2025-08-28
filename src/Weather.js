@@ -1,69 +1,82 @@
-import axios from "axios";
+
+import React, { useState } from "react";
 import "./Weather.css";
+import axios from "axios";
+import FormattedDate from "./FormattedDate";
 import WeatherInfo from "./WeatherInfo";
 import WeatherForecast from "./WeatherForecast";
-import { useState } from "react";
 
 export default function Weather(props) {
-  const [weatherData, setWeatherData] = useState({ ready: false });
-  const [city, setCity] = useState(props.defaultCity);
+  const [ready, setReady] = useState(false);
+  const [weatherData, setWeatherData] = useState({});
+  const [city, setCity] = useState(props.currentCity);
+
   function handleResponse(response) {
     setWeatherData({
-      ready: true,
-      coordinates: response.data.coordinates,
-      city: response.data.city,
-      temperature: Math.round(response.data.temperature.current),
-      wind: response.data.wind.speed,
+      temperature: response.data.temperature.current,
       humidity: response.data.temperature.humidity,
-      description: response.data.condition.description,
-      icon: response.data.condition.icon,
-      date: new Date(response.data.time * 1000),
+      city: response.data.city,
+      wind: response.data.wind.speed,
+      conditions: response.data.condition.description,
+      weatherIcon: response.data.condition.icon_url,
+      iconDescription: response.data.condition.icon,
+      currentTime: new Date(response.data.time * 1000),
     });
+    setReady(true);
   }
-  function search() {
-    const apiKey = "701f9bcct4d39645ea0eo7e3b2303a9d";
-    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
+
+  function searching() {
+    const apiKey = "0af4f7ebo6ce11605e35ecb7eatc1716";
+    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
     axios.get(apiUrl).then(handleResponse);
   }
 
   function handleSubmit(event) {
     event.preventDefault();
-    search();
+    searching();
   }
 
-  function handleCityChange(event) {
+  function searchCity(event) {
     setCity(event.target.value);
   }
 
-  if (weatherData.ready) {
+  if (ready) {
     return (
       <div className="Weather">
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-9">
-              <input
-                type="search"
-                placeholder="Enter a City..."
-                className="form-control"
-                autoFocus="on"
-                onChange={handleCityChange}
-              />
-            </div>
-            <div className="col-3">
-              <input
-                type="submit"
-                value="Search"
-                className="btn btn-primary w-100"
-              />
-            </div>
+        <div className="pt-4 mx-5">
+          <div className="pb-1">
+            <FormattedDate date={weatherData.currentTime} />
           </div>
-        </form>
-        <WeatherInfo data={weatherData} />
-        <WeatherForecast coordinates={weatherData.coordinates} />
+          <div>
+            <form onSubmit={handleSubmit}>
+              <div className="row">
+                <div className="col-9">
+                  <input
+                    type="search"
+                    placeholder="Enter a city"
+                    required
+                    autoFocus="on"
+                    className="form-control w-100"
+                    onChange={searchCity}
+                  ></input>
+                </div>
+                <div className="col-3">
+                  <input
+                    type="submit"
+                    value="Search"
+                    className="btn-style w-100"
+                  ></input>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <WeatherInfo info={weatherData} />
+        <WeatherForecast info={weatherData} />
       </div>
     );
   } else {
-    search();
+    searching();
     return "Loading...";
   }
 }

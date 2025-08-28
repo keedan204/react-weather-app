@@ -1,13 +1,14 @@
-import React from "react";
-import Weather from "./Weather";
 import "./App.css";
+import Weather from "./Weather";
 
 export default function App() {
   return (
     <div className="App">
-      <div className="container">
-        <Weather defaultCity="Winnipeg" />
-
+      <div className="container pt-5">
+        <header></header>
+        <main>
+          <Weather currentCity="Winnipeg" />
+        </main>
         <footer>
           This project was coded by{" "}
           <a
@@ -15,7 +16,7 @@ export default function App() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            K Daniels
+            KeeDan204
           </a>{" "}
           and is{" "}
           <a
