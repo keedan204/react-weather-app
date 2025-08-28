@@ -10,7 +10,7 @@ export default function App() {
           <Weather currentCity="Winnipeg" />
         </main>
         <footer>
-          This project was coded by{" "}
+          This React application project was coded by{" "}
           <a
             href="https://github.com/keedan204"
             target="_blank"
